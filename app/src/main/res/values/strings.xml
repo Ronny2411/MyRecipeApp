@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MyRecipeApp</string>
+    <string name="item_image">Item Image</string>
+    <string name="search_icon">Search Icon</string>
+    <string name="meal_image">Meal Image</string>
+    <string name="close">Close</string>
+</resources>
