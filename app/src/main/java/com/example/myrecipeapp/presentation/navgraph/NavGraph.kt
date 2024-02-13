@@ -64,14 +64,12 @@ fun NavGraph(navController : NavHostController){
     }
     selectedItem = when(backStackState?.destination?.route){
         Screen.HomeScreen.route-> 0
-//        Screen.SearchScreen.route-> 1
         Screen.FavoriteScreen.route-> 1
         else-> 0
     }
 
     val isBottomBarVisible = remember(key1 = backStackState) {
         backStackState?.destination?.route == Screen.HomeScreen.route ||
-                backStackState?.destination?.route == Screen.SearchScreen.route ||
                 backStackState?.destination?.route == Screen.FavoriteScreen.route
     }
 
@@ -86,7 +84,6 @@ fun NavGraph(navController : NavHostController){
                     onItemClicked = { index ->
                         when (index) {
                             0 -> navigateToTab(navController, Screen.HomeScreen.route)
-//                            1 -> navigateToTab(navController, Screen.SearchScreen.route)
                             1 -> navigateToTab(navController, Screen.FavoriteScreen.route)
                         }
                     }
@@ -122,11 +119,6 @@ fun NavGraph(navController : NavHostController){
                 }
 
             }
-//            composable(Screen.SearchScreen.route){
-//                SearchScreen(navigateToDetails = {
-//                    navigateToDetails(navController, it)
-//                })
-//            }
             composable(Screen.FavoriteScreen.route){
                 val viewModel: FavoritesViewModel = hiltViewModel()
                 val meals = viewModel.state.value
