@@ -35,6 +35,7 @@ object Dimens {
     val NETWORK_ERROR_ICON_SIZE = 120.dp
 
     val SEARCH_TOP_BAR_HEIGHT = 56.dp
+    val NAVIGATION_BAR_HEIGHT = 50.dp
     val INFO_ICON_SIZE = 32.dp
     val MIN_SHEET_HEIGHT = 400.dp
     val EXPANDED_RADIUS_LEVEL = 0.dp

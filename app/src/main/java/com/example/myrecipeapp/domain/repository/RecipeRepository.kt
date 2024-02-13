@@ -21,4 +21,13 @@ interface RecipeRepository {
     fun filterByIngredient(ingredient: String): Flow<PagingData<FilterMeal>>
 
     suspend fun fetchMeal(idMeal: String): MealResponse
+
+    suspend fun upsertMeal(meal: Meal)
+
+    suspend fun deleteMeal(meal: Meal)
+
+    fun getMeals(): Flow<List<Meal>>
+
+    suspend fun getSelectedMeal(idMeal: String): Meal?
+
 }

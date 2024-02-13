@@ -38,18 +38,18 @@ class SharedViewModel @Inject constructor(
         "pt.png","ru.png","es.png","th.png","tn.png",
         "tr.png","vn.png")
 
-    fun updateFilterText(text: String, item: String): Flow<PagingData<FilterMeal>>{
-        return when(item){
+    val mealList = mutableStateOf<Flow<PagingData<FilterMeal>>>(emptyFlow())
+    fun updateFilterText(text: String, item: String){
+        when(item){
             "category"->{
-                recipeUseCases.getMealsByCategoryUseCase(text).cachedIn(viewModelScope)
+                mealList.value = recipeUseCases.getMealsByCategoryUseCase(text).cachedIn(viewModelScope)
             }
             "region"->{
-                recipeUseCases.getMealsByRegionUseCase(text).cachedIn(viewModelScope)
+                mealList.value = recipeUseCases.getMealsByRegionUseCase(text).cachedIn(viewModelScope)
             }
             "ingredient"->{
-                recipeUseCases.getMealsByIngredientUseCase(text).cachedIn(viewModelScope)
+                mealList.value = recipeUseCases.getMealsByIngredientUseCase(text).cachedIn(viewModelScope)
             }
-            else-> emptyFlow()
         }
     }
 

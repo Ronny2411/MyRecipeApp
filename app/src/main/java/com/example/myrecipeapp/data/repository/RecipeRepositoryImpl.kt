@@ -87,4 +87,20 @@ class RecipeRepositoryImpl(
         return recipeApi.getMeal(idMeal = idMeal)
     }
 
+    override suspend fun upsertMeal(meal: Meal) {
+        recipeDao.upsert(meal)
+    }
+
+    override suspend fun deleteMeal(meal: Meal) {
+        recipeDao.delete(meal)
+    }
+
+    override fun getMeals(): Flow<List<Meal>> {
+        return recipeDao.getMeals()
+    }
+
+    override suspend fun getSelectedMeal(idMeal: String): Meal? {
+        return recipeDao.getSelectedMeal(idMeal)
+    }
+
 }

@@ -16,6 +16,10 @@ import com.example.myrecipeapp.domain.use_cases.GetMealsByRegionUseCase
 import com.example.myrecipeapp.domain.use_cases.RecipeUseCases
 import com.example.myrecipeapp.util.Constants.BASE_URL
 import com.example.myrecipeapp.util.Constants.RECIPE_DB_NAME
+import com.example.newsapp.domain.usecases.news.DeleteMealUseCase
+import com.example.newsapp.domain.usecases.news.GetMealsUseCase
+import com.example.newsapp.domain.usecases.news.GetSelectedMealUseCase
+import com.example.newsapp.domain.usecases.news.UpsertMealUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -72,6 +76,10 @@ object AppModule {
         getMealsByCategoryUseCase = GetMealsByCategoryUseCase(recipeRepository),
         getMealsByRegionUseCase = GetMealsByRegionUseCase(recipeRepository),
         getMealsByIngredientUseCase = GetMealsByIngredientUseCase(recipeRepository),
-        getMealUseCase = GetMealUseCase(recipeRepository)
+        getMealUseCase = GetMealUseCase(recipeRepository),
+        upsertMealUseCase = UpsertMealUseCase(recipeRepository),
+        deleteMealUseCase = DeleteMealUseCase(recipeRepository),
+        getMealsUseCase = GetMealsUseCase(recipeRepository),
+        getSelectedMealUseCase = GetSelectedMealUseCase(recipeRepository)
     )
 }

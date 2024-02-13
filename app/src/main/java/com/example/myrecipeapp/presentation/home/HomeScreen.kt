@@ -70,7 +70,7 @@ fun HomeScreen(
     val ingredient = sharedViewModel.ingredient.collectAsLazyPagingItems()
     Column(modifier = Modifier.background(
         if (isSystemInDarkTheme()) Color.Black else Color.Transparent
-    )
+    ).padding(bottom = Dimens.NAVIGATION_BAR_HEIGHT)
     ) {
         Image(painter = painterResource(id = R.drawable.logo),
             contentDescription = "",
@@ -79,12 +79,6 @@ fun HomeScreen(
                 .height(LogoHeight)
                 .padding(horizontal = SmallPadding, vertical = SmallPadding)
         )
-        SearchBar(text = "",
-            readOnly = true,
-            onSearchClick = {},
-            onTextChanged = {},
-            onClick = {navController.navigate(Screen.SearchScreen.route)},
-            modifier = Modifier.padding(MediumPadding2))
         Column(
             modifier = Modifier
                 .fillMaxSize()

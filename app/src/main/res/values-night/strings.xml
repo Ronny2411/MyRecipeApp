@@ -4,4 +4,6 @@
     <string name="search_icon">Search Icon</string>
     <string name="meal_image">Meal Image</string>
     <string name="close">Close</string>
+    <string name="favorite_icon">Favorite Icon</string>
+    <string name="youtube_icon">Youtube Icon</string>
 </resources>

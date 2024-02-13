@@ -11,11 +11,6 @@ interface RecipeApi {
     @GET("list.php?c=list")
     suspend fun getCategories() : CategoriesResponse
 
-    @GET("search.php")
-    suspend fun searchMeal(
-        @Query("s") searchQuery: String
-    ) : MealResponse
-
     @GET("lookup.php")
     suspend fun getMeal(
         @Query("i") idMeal: String

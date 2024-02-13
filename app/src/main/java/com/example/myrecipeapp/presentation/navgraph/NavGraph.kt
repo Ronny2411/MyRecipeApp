@@ -1,5 +1,6 @@
 package com.example.myrecipeapp.presentation.navgraph
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
@@ -18,17 +19,24 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.paging.compose.collectAsLazyPagingItems
+import com.example.myrecipeapp.domain.model.Meal
 import com.example.myrecipeapp.presentation.common.BottomNavigationItem
 import com.example.myrecipeapp.presentation.common.RecipeBottomNavigation
+import com.example.myrecipeapp.presentation.details.DetailsEvent
 import com.example.myrecipeapp.presentation.home.ViewAllItems
 import com.example.myrecipeapp.presentation.details.DetailsScreen
+import com.example.myrecipeapp.presentation.details.DetailsViewModel
 import com.example.myrecipeapp.presentation.favorites.FavoritesScreen
+import com.example.myrecipeapp.presentation.favorites.FavoritesViewModel
 import com.example.myrecipeapp.presentation.home.HomeScreen
 import com.example.myrecipeapp.presentation.home.SharedViewModel
 import com.example.myrecipeapp.presentation.search.SearchScreen
 import com.example.myrecipeapp.presentation.home.ListAllMeals
+import com.example.myrecipeapp.presentation.search.SearchViewModel
 
 @Composable
 fun NavGraph(navController : NavHostController){
@@ -39,10 +47,10 @@ fun NavGraph(navController : NavHostController){
                 icon = Icons.Default.Home,
                 text = "Home"
             ),
-            BottomNavigationItem(
-                icon = Icons.Default.Search,
-                text = "Search"
-            ),
+//            BottomNavigationItem(
+//                icon = Icons.Default.Search,
+//                text = "Search"
+//            ),
             BottomNavigationItem(
                 icon = Icons.Default.FavoriteBorder,
                 text = "Favorites"
@@ -56,8 +64,8 @@ fun NavGraph(navController : NavHostController){
     }
     selectedItem = when(backStackState?.destination?.route){
         Screen.HomeScreen.route-> 0
-        Screen.SearchScreen.route-> 1
-        Screen.FavoriteScreen.route-> 2
+//        Screen.SearchScreen.route-> 1
+        Screen.FavoriteScreen.route-> 1
         else-> 0
     }
 
@@ -78,8 +86,8 @@ fun NavGraph(navController : NavHostController){
                     onItemClicked = { index ->
                         when (index) {
                             0 -> navigateToTab(navController, Screen.HomeScreen.route)
-                            1 -> navigateToTab(navController, Screen.SearchScreen.route)
-                            2 -> navigateToTab(navController, Screen.FavoriteScreen.route)
+//                            1 -> navigateToTab(navController, Screen.SearchScreen.route)
+                            1 -> navigateToTab(navController, Screen.FavoriteScreen.route)
                         }
                     }
                 )
@@ -91,16 +99,42 @@ fun NavGraph(navController : NavHostController){
                 HomeScreen(navController)
             }
             composable(Screen.DetailScreen.route){
-                val mealId = navController.previousBackStackEntry?.savedStateHandle?.get<String>("mealId")
-                if (mealId != null) {
-                    DetailsScreen(mealId= mealId,navController)
+                val detailsViewModel: DetailsViewModel = hiltViewModel()
+                if (detailsViewModel.sideEffect!=null){
+                    Toast.makeText(LocalContext.current, detailsViewModel.sideEffect, Toast.LENGTH_SHORT).show()
+                    detailsViewModel.onEvent(DetailsEvent.RemoveSideEffect)
                 }
+                val mealId = navController.previousBackStackEntry?.savedStateHandle?.get<String>("mealId")
+                val meal = navController.previousBackStackEntry?.savedStateHandle?.get<Meal>("meal")
+                if (mealId != null) {
+                    LaunchedEffect(key1 = mealId) {
+                        detailsViewModel.getMeals(mealId)
+                    }
+                    val mealResponse by detailsViewModel.meal
+                    val meals = mealResponse.meals.firstOrNull()
+                    if (meals != null) {
+                        DetailsScreen(meal= meals,navController,event = detailsViewModel::onEvent)
+                    }
+                } else {
+                    if (meal != null) {
+                        DetailsScreen(meal= meal,navController,event = detailsViewModel::onEvent)
+                    }
+                }
+
             }
-            composable(Screen.SearchScreen.route){
-                SearchScreen()
-            }
+//            composable(Screen.SearchScreen.route){
+//                SearchScreen(navigateToDetails = {
+//                    navigateToDetails(navController, it)
+//                })
+//            }
             composable(Screen.FavoriteScreen.route){
-                FavoritesScreen()
+                val viewModel: FavoritesViewModel = hiltViewModel()
+                val meals = viewModel.state.value
+                FavoritesScreen(meals = meals.meals,
+                    onClick = {meal->
+                        navigateToDetails(navController,meal)
+                    },
+                    navigateBack = { navController.popBackStack() })
             }
             composable(Screen.ViewAllScreen.route){
                 val text = navController.previousBackStackEntry?.savedStateHandle?.get<String>("text")
@@ -116,7 +150,10 @@ fun NavGraph(navController : NavHostController){
                     navController.previousBackStackEntry?.savedStateHandle?.get<String>("item")
                 if (text != null && item != null) {
                     val viewModel: SharedViewModel = hiltViewModel()
-                    val filteredMeals = viewModel.updateFilterText(text,item).collectAsLazyPagingItems()
+                    LaunchedEffect(key1 = text){
+                        viewModel.updateFilterText(text,item)
+                    }
+                    val filteredMeals = viewModel.mealList.value.collectAsLazyPagingItems()
                     ListAllMeals(text = text,
                         filteredMeals = filteredMeals,
                         navigateToDetails = { navigateToDetails(navController,it) }){
@@ -142,6 +179,11 @@ private fun navigateToTab(navController: NavController, route: String){
 
 fun navigateToDetails(navController: NavController, mealId: String){
     navController.currentBackStackEntry?.savedStateHandle?.set("mealId",mealId)
+    navController.navigate(Screen.DetailScreen.route)
+}
+
+fun navigateToDetails(navController: NavController, meal: Meal){
+    navController.currentBackStackEntry?.savedStateHandle?.set("meal",meal)
     navController.navigate(Screen.DetailScreen.route)
 }
 

@@ -1,9 +1,12 @@
 package com.example.myrecipeapp.domain.model
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.parcelize.Parcelize
 
 @Entity
+@Parcelize
 data class Meal(
     val dateModified: String?,
     @PrimaryKey
@@ -59,4 +62,4 @@ data class Meal(
     val strSource: String?,
     val strTags: String?,
     val strYoutube: String?
-)
+) : Parcelable

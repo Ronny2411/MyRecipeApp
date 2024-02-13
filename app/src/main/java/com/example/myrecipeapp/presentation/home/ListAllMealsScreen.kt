@@ -106,11 +106,6 @@ fun MealViewCard(
                     fontWeight = FontWeight.Black,
                     modifier = Modifier.padding(start = MediumPadding2, bottom = MediumPadding2)
                 )
-                IconButton(onClick = { /*TODO*/ },
-                    modifier = Modifier.padding(bottom = MediumPadding2, end = MediumPadding2)) {
-                    Icon(imageVector = Icons.Filled.FavoriteBorder,
-                        contentDescription = "Save Icon")
-                }
             }
         }
     }
