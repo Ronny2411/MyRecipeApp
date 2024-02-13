@@ -18,7 +18,6 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -34,9 +33,7 @@ import com.example.myrecipeapp.presentation.favorites.FavoritesScreen
 import com.example.myrecipeapp.presentation.favorites.FavoritesViewModel
 import com.example.myrecipeapp.presentation.home.HomeScreen
 import com.example.myrecipeapp.presentation.home.SharedViewModel
-import com.example.myrecipeapp.presentation.search.SearchScreen
 import com.example.myrecipeapp.presentation.home.ListAllMeals
-import com.example.myrecipeapp.presentation.search.SearchViewModel
 
 @Composable
 fun NavGraph(navController : NavHostController){
@@ -47,10 +44,6 @@ fun NavGraph(navController : NavHostController){
                 icon = Icons.Default.Home,
                 text = "Home"
             ),
-//            BottomNavigationItem(
-//                icon = Icons.Default.Search,
-//                text = "Search"
-//            ),
             BottomNavigationItem(
                 icon = Icons.Default.FavoriteBorder,
                 text = "Favorites"
